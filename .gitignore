@@ -1,0 +1,31 @@
+# Byte-compiled / optimized / DLL
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Distribution / packaging
+build/
+dist/
+*.egg-info/
+.eggs/
+
+# Virtual environments
+.venv/
+venv/
+env/
+
+# Runtime artifacts written next to the source
+trace.log
+debug.log
+*.log
+
+# OS files
+Thumbs.db
+ehthumbs.db
+desktop.ini
+.DS_Store
+
+# IDE
+.idea/
+.vscode/
+*.swp
