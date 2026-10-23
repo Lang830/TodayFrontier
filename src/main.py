@@ -14,10 +14,18 @@ import subprocess
 from datetime import date, datetime
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-HERE = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-LOG_DIR = os.path.join(os.environ.get("LOCALAPPDATA") or os.path.expanduser("~"),
-                       "TodayFrontier", "logs")
+# PyInstaller 冻结后 __file__ 指向临时解压目录，项目根须改从 sys._MEIPASS 取
+IS_FROZEN = bool(getattr(sys, "frozen", False))
+if IS_FROZEN:
+    HERE = getattr(sys, "_MEIPASS", os.path.dirname(sys.executable))
+else:
+    HERE = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
+# 与 config.APP_DIR 同址，此处独立计算是因为日志要在导入 Qt 之前就绪
+APP_HOME = os.path.join(os.environ.get("LOCALAPPDATA") or os.path.expanduser("~"),
+                        "TodayFrontier")
+LOG_DIR = os.path.join(APP_HOME, "logs")
 os.makedirs(LOG_DIR, exist_ok=True)
 from logging.handlers import RotatingFileHandler
 
@@ -29,7 +37,7 @@ _handler.setFormatter(logging.Formatter("%(asctime)s %(levelname)s %(message)s")
 _log.addHandler(_handler)
 logging = _log
 
-_TRACE_PATH = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "trace.log")
+_TRACE_PATH = os.path.join(LOG_DIR, "trace.log")  # 程序目录可能只读，一律写用户目录
 
 
 def _trace(msg):

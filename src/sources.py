@@ -5,6 +5,7 @@ import html
 import json
 import os
 import re
+import sys
 import urllib.request
 import xml.etree.ElementTree as ET
 from concurrent.futures import ThreadPoolExecutor
@@ -13,7 +14,12 @@ from datetime import date
 from PySide6.QtCore import QThread, Signal
 
 UA = "TodayFrontier/0.1 (desktop widget)"
-ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
+# PyInstaller 打包后 __file__ 指向临时解压目录，内置库随包解压在 sys._MEIPASS 下
+if getattr(sys, "frozen", False):
+    ROOT = getattr(sys, "_MEIPASS", os.path.dirname(os.path.abspath(__file__)))
+else:
+    ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 RESOURCE_DIR = os.path.join(ROOT, "resources")
 
 HN_TOP = "https://hacker-news.firebaseio.com/v0/topstories.json"

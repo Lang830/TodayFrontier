@@ -19,22 +19,33 @@
 
 ## 快速开始
 
+### 方式一：下载免安装版（不想装 Python 看这里）
+
+1. 打开仓库的 [Releases](https://github.com/Lang830/TodayFrontier/releases) 页面
+2. 下载 `TodayFrontier-x.x.x-win64.zip`（约 40 MB）
+3. 解压到任意文件夹，双击里面的 `TodayFrontier.exe`
+
+无需安装 Python；运行数据仍写入 `%LOCALAPPDATA%\TodayFrontier\`。
+
+### 方式二：从源码运行
+
 ```bat
 git clone https://github.com/Lang830/TodayFrontier.git
 cd TodayFrontier
 
-python -m venv .venv
-.venv\Scripts\pip install -r requirements.txt
-
+install.bat
 run.bat
 ```
 
-> 依赖只有 `PySide6-Essentials`（约 80 MB），完整版含 Qt 全量库没必要。
-> `.venv` 必须建在**项目根目录** —— `run.bat` 按这个约定找解释器，不查注册表也无需改脚本。
-> 国内建议走清华镜像：`pip install -r requirements.txt -i https://pypi.tuna.tsinghua.edu.cn/simple`
+> `install.bat` 会自动定位 Python、在项目根目录建 `.venv`、装依赖（先走清华镜像，失败回退官方源），可重复执行，装过会跳过。
+> 等价的手工操作：`python -m venv .venv` → `.venv\Scripts\pip install -r requirements.txt`
 > **不要双击 `src\main.py`** —— 会走文件关联的解释器。虽然代码会自动扫一遍装了依赖的那个再重启，但没必要绕这步。
 
 **环境**：Windows 10 21H2+ / Windows 11 · Python 3.11+（验证于 3.13）
+
+### 自己打包 exe
+
+改完代码想发新版：双击 `build.bat`，产出 `dist\TodayFrontier\`（约 97 MB），把它压缩成 zip 上传到 GitHub Releases 即可分发。首次打包会自动补装 PyInstaller。
 
 ---
 
@@ -69,7 +80,9 @@ TodayFrontier/
 │  └─ theme.py       设计 Token
 ├─ resources/        algorithms.json · frameworks.json
 ├─ requirements.txt
-└─ run.bat
+├─ run.bat           日常启动
+├─ install.bat       一键装依赖（可重复执行）
+└─ build.bat         打包独立 exe
 ```
 
 **运行时数据** `%LOCALAPPDATA%\TodayFrontier\`

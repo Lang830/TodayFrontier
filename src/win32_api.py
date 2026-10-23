@@ -289,6 +289,8 @@ TASK_NAME = "TodayFrontier"
 
 
 def _startup_command() -> str:
+    if getattr(sys, "frozen", False):  # 打包成 exe 后自启直接调自身
+        return '"%s"' % sys.executable
     exe = sys.executable
     if exe.lower().endswith("python.exe"):
         exe = exe[:-10] + "pythonw.exe"
